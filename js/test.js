@@ -1,14 +1,17 @@
 
-
+//where all the layers are held
 var stage = new Kinetic.Stage({
 	container: 'drawing',
 	width: document.width,
 	height: document.height
 });
 
+//layer for our obj
 var layer = new Kinetic.Layer();
+//layer for our messages
 var messageLayer=new Kinetic.Layer();
 
+//test your output with this command
  function writeMessage(messageLayer, message) {
         var context = messageLayer.getContext();
         messageLayer.clear();
@@ -43,11 +46,16 @@ var simpleText= new Kinetic.Text({
 	fontSize:26,
 	fill: 'black',
 	fontFamily:'Lusitana'
-})
+});
+
+
 
 group.add(rect);
 group.add(simpleText);
 
+//function runs after image has loaded
+//creates grouped object with image, text and rect
+//then adds to layer and then the stage
 imageObj.onload = function(){
 	var chaland = new Kinetic.Image({
 		x:5,
@@ -79,14 +87,46 @@ $("#imageDialog").toggle();
 	stage.add(messageLayer);
 };
 
+//close image dialog window
 $(imageDialog).dblclick(function(e){
 	$(imageDialog).toggle();
 })
 
+//add drag-drop listener to canvas
+stage.getContainer().addEventListener("dragover", function (evt) {
+evt.preventDefault();
+}, false);
 
 
+//Drag and drop an image onto the canvas from the desktop
+var dropPic=new Image();
+stage.getContainer().addEventListener("drop", function (evt) {
+var files = evt.dataTransfer.files;
+if (files.length > 0) {
+var file = files[0];
+if (typeof FileReader !== "undefined" && file.type.indexOf("image") != -1) {
+var reader = new FileReader();
+reader.onload = function (evt) {
+dropPic.src = evt.target.result;
+var dropped = new Kinetic.Image({
+	x:500,
+	y:500,
+	height:200,
+	width:200,
+	image:dropPic,
+	draggable:true
+});
+layer.add(dropped);
+layer.draw();
+};
+reader.readAsDataURL(file);
+}
+}
+evt.preventDefault();
+}, false); 
 
 
+//handle for image src name
 imageObj.src = "images/chaland.jpg";
 
 	
