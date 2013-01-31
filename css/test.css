@@ -1,0 +1,14 @@
+
+#imageDialog{
+
+display:none;
+	height: 200px;
+	width: 200px;
+	position:absolute;
+	left:100px;
+	top:100px;
+	z-index:10;
+	border: solid #000;
+border-width: 1px 1px 1px 1px;
+background-color: white;
+}
