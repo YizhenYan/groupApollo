@@ -48,6 +48,13 @@ var simpleText= new Kinetic.Text({
 	fontFamily:'Lusitana'
 });
 
+var randomHexGenerator = function(){
+        return '#'+'0123456789abcdef'.split('').map(function(v,i,a){
+            return i>5 ? null : a[Math.floor(Math.random()*16)] }).join('')
+    };
+
+//build a new picture object, if a url is a parameter
+//it will use that picture, if not it will use the default pic.
 newPictureObj = function(urlDrop){
 var picObj = new Image();
 var picRect = new Kinetic.Rect({
@@ -73,12 +80,39 @@ var headerText = new Kinetic.Text({
 	fontFamily:'Lusitana'
 });
 
+
+//return function(headerText,picGroup,picRect,picObj){
+
 headerText.on('dblclick',function(evt){
-	headerText.setText('test');
-	//layer.remove(headerText);
-	//layer.add(headerText);
-	layer.draw();
+	var textName=this;
+var temp=headerText.getText();
+writeMessage(messageLayer, temp);
+headerText.setFill(randomHexGenerator());
+headerText.setText(randomHexGenerator());
+layer.draw();
+$('#nameEdit').attr('value',temp);
+//$('#nameEditDialog').show();
+//headerText.on('dblclick',function(evt){
+//var filledIn=$('#nameEdit').val();	
+headerText.setText(prompt('New Text:'));
+//$('#nameEditDialog').hide();
+layer.draw();
 });
+//	$('#nameEditDialog').keypress(function(e){
+//	if(e.which === 13){
+//var filledIn=$('#nameEdit').val();
+//writeMessage(messageLayer, filledIn);
+//headerText.setText(filledIn);
+//headerText.setFill(randomHexGenerator());
+//layer.draw();
+
+//	$('#nameEditDialog').hide();
+//	}
+//});
+//});
+
+
+
 
 
 picObj.onload = function(){
@@ -89,6 +123,7 @@ picObj.onload = function(){
 		width:200,
 		image:picObj
 	});
+	//headerText.setText('test');
 	picSquare.on('dblclick',function(evt){
 writeMessage(messageLayer, 'DBL click group');
 var dx=(picGroup.getAbsolutePosition().x)-20;
@@ -115,6 +150,8 @@ if (urlDrop===undefined)
 picObj.src="images/default.jpg";
 else
 picObj.src=urlDrop;
+//}(headerText,picGroup,picRect,picObj);
+//return picGroup;
 };
 
 
@@ -186,8 +223,13 @@ reader.readAsDataURL(file);
 evt.preventDefault();
 }, false); 
 
-newPictureObj();
-newPictureObj();
+
+
+
+var an=new newPictureObj(undefined);
+var pm=new newPictureObj(undefined);
+
+
 
 //handle for image src name
 imageObj.src = "images/chaland.jpg";
