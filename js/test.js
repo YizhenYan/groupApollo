@@ -17,9 +17,10 @@ var messageLayer=new Kinetic.Layer();
         messageLayer.clear();
         context.font = '18pt Lusitana';
         context.fillStyle = 'black';
-        context.fillText(message, 10, 25);
+        context.fillText(message, 500, 25);
       }
 
+//used for chaland test obj
 var rect = new Kinetic.Rect({
 	x: 0,
 	y: 0,
@@ -31,7 +32,7 @@ var rect = new Kinetic.Rect({
 });
 
 
-
+//used for chaland test obj
 var imageObj= new Image();
 var group = new Kinetic.Group({
 	x:100,
@@ -39,6 +40,8 @@ var group = new Kinetic.Group({
 	draggable:true
 });
 
+
+//used for chaland test obj
 var simpleText= new Kinetic.Text({
 	x:0,
 	y:-23,
@@ -48,6 +51,7 @@ var simpleText= new Kinetic.Text({
 	fontFamily:'Lusitana'
 });
 
+//generate random hex value for colour
 var randomHexGenerator = function(){
         return '#'+'0123456789abcdef'.split('').map(function(v,i,a){
             return i>5 ? null : a[Math.floor(Math.random()*16)] }).join('')
@@ -56,6 +60,8 @@ var randomHexGenerator = function(){
 //build a new picture object, if a url is a parameter
 //it will use that picture, if not it will use the default pic.
 newPictureObj = function(urlDrop){
+
+var metaData = {};
 var picObj = new Image();
 var picRect = new Kinetic.Rect({
 	x: 0,
@@ -80,9 +86,7 @@ var headerText = new Kinetic.Text({
 	fontFamily:'Lusitana'
 });
 
-
-//return function(headerText,picGroup,picRect,picObj){
-
+//click on object text to change name
 headerText.on('dblclick',function(evt){
 	var textName=this;
 var temp=headerText.getText();
@@ -91,30 +95,13 @@ headerText.setFill(randomHexGenerator());
 headerText.setText(randomHexGenerator());
 layer.draw();
 $('#nameEdit').attr('value',temp);
-//$('#nameEditDialog').show();
-//headerText.on('dblclick',function(evt){
-//var filledIn=$('#nameEdit').val();	
 headerText.setText(prompt('New Text:'));
-//$('#nameEditDialog').hide();
 layer.draw();
 });
-//	$('#nameEditDialog').keypress(function(e){
-//	if(e.which === 13){
-//var filledIn=$('#nameEdit').val();
-//writeMessage(messageLayer, filledIn);
-//headerText.setText(filledIn);
-//headerText.setFill(randomHexGenerator());
-//layer.draw();
-
-//	$('#nameEditDialog').hide();
-//	}
-//});
-//});
 
 
 
-
-
+//when image has loaded do this stuff
 picObj.onload = function(){
 	var picSquare = new Kinetic.Image({
 		x:5,
@@ -150,17 +137,15 @@ if (urlDrop===undefined)
 picObj.src="images/default.jpg";
 else
 picObj.src=urlDrop;
-//}(headerText,picGroup,picRect,picObj);
-//return picGroup;
 };
 
-
+//for chaland test obj
 group.add(rect);
 group.add(simpleText);
 
 
 
-
+//for chaland test obj
 //function runs after image has loaded
 //creates grouped object with image, text and rect
 //then adds to layer and then the stage
@@ -223,11 +208,31 @@ reader.readAsDataURL(file);
 evt.preventDefault();
 }, false); 
 
+//scales stage by -0.05
+$('#zoomOut').click(function(e){
+	var zoomIn=stage.getScale();
+	zoomIn.x-=0.05;
+	zoomIn.y-=0.05;
+	stage.setScale(zoomIn);
+	layer.draw();
+});
+
+//scales stage by +0.05
+$('#zoomIn').click(function(e){
+	var zoomOut=stage.getScale();
+	zoomOut.x+=0.05;
+	zoomOut.y+=0.05;
+	stage.setScale(zoomOut);
+	layer.draw();
+});
 
 
+//add a new picture object
+$('#addPic').click(function(e){
+	newPictureObj(undefined);
+});
 
-var an=new newPictureObj(undefined);
-var pm=new newPictureObj(undefined);
+
 
 
 

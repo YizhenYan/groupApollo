@@ -25,3 +25,23 @@ background-color: white;
 border-width: 1px 1px 1px 1px;
 background-color: white;
 }
+
+#nav{
+	width:400px;
+	position:absolute;
+	left:25px;
+	top:25px;
+	border: solid #000;
+border-width: 1px 1px 1px 1px;
+background-color: white;
+}
+
+#nav li{
+	float: left;
+	list-style-type: none;
+	padding-left: .5em;
+}
+
+#nav li:hover{
+	color: red;
+}
