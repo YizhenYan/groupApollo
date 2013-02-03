@@ -29,13 +29,18 @@ background-color: white;
 #nav{
 	width:400px;
 	position:absolute;
-	left:25px;
-	top:25px;
+	left:15px;
+	top:15px;
 	border: solid #000;
 border-width: 1px 1px 1px 1px;
 background-color: white;
+font-family: 'PT Sans Narrow';
+font-size: 1.2em;
 }
 
+#nav ul{
+	padding-top: -20px;
+}
 #nav li{
 	float: left;
 	list-style-type: none;

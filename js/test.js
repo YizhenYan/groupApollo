@@ -6,10 +6,60 @@ var stage = new Kinetic.Stage({
 	height: document.height
 });
 
+//layer for grid bg
+var bgLayer =new Kinetic.Layer();
 //layer for our obj
 var layer = new Kinetic.Layer();
+stage.add(bgLayer);
+stage.add(layer);
 //layer for our messages
 var messageLayer=new Kinetic.Layer();
+
+
+//grid values
+var CELL_SIZE = 30,
+w = 80,
+h = 100,
+W = w * CELL_SIZE,
+H = h * CELL_SIZE;
+
+//grid function, pass in layer to insert into
+var make_grid = function(layer) {
+var back = new Kinetic.Rect({
+    x: 0,
+    y: 0,
+    width: W,
+    height: H,
+    fill: "white"
+});
+layer.add(back);
+for (i = 0; i < w + 1; i++) {
+    var I = i * CELL_SIZE;
+    var l = new Kinetic.Line({
+    	strokeWidth:1,
+        stroke: 'C0D5FC',
+        points: [I+.5, 0, I, H]
+    });
+    layer.add(l);
+}
+
+for (j = 0; j < h + 1; j++) {
+    var J = j * CELL_SIZE;
+    var l2 = new Kinetic.Line({
+    	strokeWidth:.1,
+        stroke: 'C0D5FC',
+        points: [0, J+.5, W, J+.5]
+    });
+    layer.add(l2);
+}
+    return back; 
+};
+
+//build grid
+var gr = make_grid(bgLayer);
+bgLayer.draw();
+
+
 
 //test your output with this command
  function writeMessage(messageLayer, message) {
@@ -22,8 +72,8 @@ var messageLayer=new Kinetic.Layer();
 
 //used for chaland test obj
 var rect = new Kinetic.Rect({
-	x: 0,
-	y: 0,
+	x: 0.5,
+	y: 0.5,
 	width: 210,
 	height:210,
 	fill: 'white',
@@ -43,13 +93,33 @@ var group = new Kinetic.Group({
 
 //used for chaland test obj
 var simpleText= new Kinetic.Text({
-	x:0,
-	y:-23,
+	x:0.5,
+	y:-23.5,
 	text:'Chaland',
 	fontSize:26,
 	fill: 'black',
-	fontFamily:'Lusitana'
+	fontFamily:'PT Sans Narrow'
 });
+
+/*var bgPicObj=new Image();
+
+bgPicObj.onload=function(){
+	var picBG=new Kinetic.Rect({
+		x:0,
+		y:0,
+		height:2*document.height,
+		width:2*document.width,
+		fillPatternImage:bgPicObj,
+		fillPatternRepeat:'repeat'
+
+	});
+bgLayer.add(picBG);
+bgLayer.draw();
+stage.add(bgLayer);
+};
+*/
+
+//bgPicObj.src="images/grid.jpg";
 
 //generate random hex value for colour
 var randomHexGenerator = function(){
@@ -64,12 +134,16 @@ newPictureObj = function(urlDrop){
 var metaData = {};
 var picObj = new Image();
 var picRect = new Kinetic.Rect({
-	x: 0,
-	y: 0,
+	x: 0.5,
+	y: 0.5,
 	width: 210,
 	height:210,
 	fill: 'white',
 	stroke:'black',
+	  shadowColor: 'black',
+                shadowBlur: 0,
+                shadowOffset: { x: 0, y: 0 },
+                shadowOpacity: 0.4,
 	strokeWidth: 1
 });
 var picGroup = new Kinetic.Group({
@@ -78,12 +152,12 @@ var picGroup = new Kinetic.Group({
 	draggable:true
 });
 var headerText = new Kinetic.Text({
-	x:0,
-	y:-23,
+	x:0.5,
+	y:-23.5,
 	text:'New Picture',
 	fontSize:26,
 	fill:'black',
-	fontFamily:'Lusitana'
+	fontFamily:'PT Sans Narrow'
 });
 
 //click on object text to change name
@@ -99,6 +173,17 @@ headerText.setText(prompt('New Text:'));
 layer.draw();
 });
 
+picGroup.on('dragstart',function(evt){
+picRect.setShadowBlur(10);
+picRect.setShadowOffset({x:5,y:5});
+layer.draw();
+});
+
+picGroup.on('dragend',function(evt){
+picRect.setShadowBlur(0);
+picRect.setShadowOffset({x:0,y:0});
+layer.draw();
+});
 
 
 //when image has loaded do this stuff
@@ -176,7 +261,7 @@ $("#imageDialog").toggle();
 	group.add(chaland);
 	layer.add(group);
 	layer.draw();	
-	stage.add(layer);
+	//stage.add(layer);
 	stage.add(messageLayer);
 };
 
@@ -214,7 +299,9 @@ $('#zoomOut').click(function(e){
 	zoomIn.x-=0.05;
 	zoomIn.y-=0.05;
 	stage.setScale(zoomIn);
+	bgLayer.draw();
 	layer.draw();
+
 });
 
 //scales stage by +0.05
@@ -223,6 +310,7 @@ $('#zoomIn').click(function(e){
 	zoomOut.x+=0.05;
 	zoomOut.y+=0.05;
 	stage.setScale(zoomOut);
+	bgLayer.draw();
 	layer.draw();
 });
 
