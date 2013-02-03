@@ -1,20 +1,23 @@
 
-//where all the layers are held
+//stage where all the layers are held
 var stage = new Kinetic.Stage({
 	container: 'drawing',
 	width: document.width,
 	height: document.height
 });
 
+
 //layer for grid bg
 var bgLayer =new Kinetic.Layer();
 //layer for our obj
 var layer = new Kinetic.Layer();
+
+//build stage
 stage.add(bgLayer);
 stage.add(layer);
+
 //layer for our messages
 var messageLayer=new Kinetic.Layer();
-
 
 //grid values
 var CELL_SIZE = 30,
@@ -23,7 +26,8 @@ h = 100,
 W = w * CELL_SIZE,
 H = h * CELL_SIZE;
 
-//grid function, pass in layer to insert into
+
+//grid layer function, pass in layer to insert into
 var make_grid = function(layer) {
 var back = new Kinetic.Rect({
     x: 0,
@@ -58,7 +62,6 @@ for (j = 0; j < h + 1; j++) {
 //build grid
 var gr = make_grid(bgLayer);
 bgLayer.draw();
-
 
 
 //test your output with this command
@@ -101,25 +104,6 @@ var simpleText= new Kinetic.Text({
 	fontFamily:'PT Sans Narrow'
 });
 
-/*var bgPicObj=new Image();
-
-bgPicObj.onload=function(){
-	var picBG=new Kinetic.Rect({
-		x:0,
-		y:0,
-		height:2*document.height,
-		width:2*document.width,
-		fillPatternImage:bgPicObj,
-		fillPatternRepeat:'repeat'
-
-	});
-bgLayer.add(picBG);
-bgLayer.draw();
-stage.add(bgLayer);
-};
-*/
-
-//bgPicObj.src="images/grid.jpg";
 
 //generate random hex value for colour
 var randomHexGenerator = function(){
@@ -129,23 +113,13 @@ var randomHexGenerator = function(){
 
 //build a new picture object, if a url is a parameter
 //it will use that picture, if not it will use the default pic.
+//must be modified to allow for all parameters to be used on build
+//so that objects can be built with save information
 newPictureObj = function(urlDrop){
 
 var metaData = {};
 var picObj = new Image();
-var picRect = new Kinetic.Rect({
-	x: 0.5,
-	y: 0.5,
-	width: 210,
-	height:210,
-	fill: 'white',
-	stroke:'black',
-	  shadowColor: 'black',
-                shadowBlur: 0,
-                shadowOffset: { x: 0, y: 0 },
-                shadowOpacity: 0.4,
-	strokeWidth: 1
-});
+
 var picGroup = new Kinetic.Group({
 	x:300,
 	y:300,
@@ -173,7 +147,36 @@ headerText.setText(prompt('New Text:'));
 layer.draw();
 });
 
-picGroup.on('dragstart',function(evt){
+
+
+//when image has loaded do this stuff
+//make image object, make exterior rectangle
+//add mouse events
+picObj.onload = function(){
+	var picSquare = new Kinetic.Image({
+		x:5,
+		y:5,
+		height:200,
+		width:200*(picObj.width/picObj.height),
+		image:picObj
+	});
+
+	var picRect = new Kinetic.Rect({
+	x: 0.5,
+	y: 0.5,
+	width: (200*(picObj.width/picObj.height))+10,
+	height:210,
+	fill: 'white',
+	stroke:'black',
+	  shadowColor: 'black',
+                shadowBlur: 0,
+                shadowOffset: { x: 0, y: 0 },
+                shadowOpacity: 0.4,
+	strokeWidth: 1
+});
+
+//adds shadow to object when moved
+	picGroup.on('dragstart',function(evt){
 picRect.setShadowBlur(10);
 picRect.setShadowOffset({x:5,y:5});
 layer.draw();
@@ -185,24 +188,27 @@ picRect.setShadowOffset({x:0,y:0});
 layer.draw();
 });
 
+//need a good way to show selection
+picGroup.on('mousedown',function(evt){
+	if(picRect.getStroke() ==='black'){
+picRect.setStroke('red');
+layer.draw();}
+else{
+	picRect.setStroke('black');
+	layer.draw();
+	}
+});
 
-//when image has loaded do this stuff
-picObj.onload = function(){
-	var picSquare = new Kinetic.Image({
-		x:5,
-		y:5,
-		height:200,
-		width:200,
-		image:picObj
-	});
-	//headerText.setText('test');
+
+//event for double clicking on image
+//open up the div #imageDialog
 	picSquare.on('dblclick',function(evt){
 writeMessage(messageLayer, 'DBL click group');
 var dx=(picGroup.getAbsolutePosition().x)-20;
 //writeMessage(messageLayer, dx);
 var dy=(picGroup.getAbsolutePosition().y)+20;
 //writeMessage(messageLayer, dy);
-var imgx=picObj.width+40;
+var imgx=picObj.width+20;
 var imgy=picObj.height+100;
 writeMessage(messageLayer, imgy);
 $('#imageDialog').css('left',dx);
