@@ -27,24 +27,27 @@ background-color: white;
 }
 
 #nav{
-	width:400px;
+	width:650px;
 	position:absolute;
 	left:15px;
 	top:15px;
-	border: solid #000;
+	border: solid #C0D5FC;
 border-width: 1px 1px 1px 1px;
-background-color: white;
-font-family: 'PT Sans Narrow';
-font-size: 1.2em;
+background-color: #C0D5FC;
+font-family: 'icons';
+font-size: 2em;
+color: white;
 }
 
 #nav ul{
-	padding-top: -20px;
+	position: relative;
+	top:-15px;
+	left:-20px;
 }
 #nav li{
 	float: left;
 	list-style-type: none;
-	padding-left: .5em;
+	padding-left: .3em;
 }
 
 #nav li:hover{

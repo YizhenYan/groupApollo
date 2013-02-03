@@ -19,6 +19,7 @@ stage.add(layer);
 //layer for our messages
 var messageLayer=new Kinetic.Layer();
 
+
 //grid values
 var CELL_SIZE = 30,
 w = 80,
@@ -166,7 +167,7 @@ picObj.onload = function(){
 	y: 0.5,
 	width: (200*(picObj.width/picObj.height))+10,
 	height:210,
-	fill: 'white',
+	//fill: 'white',
 	stroke:'black',
 	  shadowColor: 'black',
                 shadowBlur: 0,
@@ -325,9 +326,6 @@ $('#zoomIn').click(function(e){
 $('#addPic').click(function(e){
 	newPictureObj(undefined);
 });
-
-
-
 
 
 //handle for image src name
